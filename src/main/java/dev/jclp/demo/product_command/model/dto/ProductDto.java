@@ -1,4 +1,6 @@
 package dev.jclp.demo.product_command.model.dto;
 
-public record ProductDto(String name, Double price) {
+import java.math.BigDecimal;
+
+public record ProductDto(Long id, String name, BigDecimal price) {
 }
