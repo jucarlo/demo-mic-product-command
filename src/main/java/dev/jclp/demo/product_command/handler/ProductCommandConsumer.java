@@ -49,6 +49,23 @@ public class ProductCommandConsumer {
                     LOGGER.info("Product created successfully: {}", createdProduct);
                     reply = new Reply<>("SUCCESS", "Product created successfully", createdProduct);
                     break;
+                    case    "READ":
+                    LOGGER.info("Received READ command");
+                    if (command.id() == null) {
+                        LOGGER.warn("Received READ command with null id");
+                        reply = new Reply<>("ERROR", "Command id cannot be null for READ operation", null);
+                    } else {
+                        LOGGER.info("Received READ command for product id: {}", command.id());
+                        ProductDto product = productService.findById(command.id());
+                        if (product != null) {
+                            LOGGER.info("Product read successfully: {}", product);
+                            reply = new Reply<>("SUCCESS", "Product read successfully", product);
+                        } else {
+                            LOGGER.warn("Product not found for id: {}", command.id());
+                            reply = new Reply<>("ERROR", "Product not found for id: " + command.id(), null);
+                        }
+                    }
+                    break;
 //                case "UPDATE":
 //                    LOGGER.info("Received UPDATE command");
 //                    // Handle update command

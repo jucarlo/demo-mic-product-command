@@ -23,4 +23,12 @@ public class ProductServiceImpl implements ProductService {
         Product productNew = productRepository.save(Mappers.toProductEntity(productDto));
         return Mappers.toProductDto(productNew);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDto findById(Long id) {
+        return productRepository.findById(id)
+                .map(Mappers::toProductDto)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+    }
 }
