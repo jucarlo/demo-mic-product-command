@@ -48,6 +48,7 @@ public class ProductCommandConsumer {
                     ProductDto createdProduct = productService.create(command.body());
                     LOGGER.info("Product created successfully: {}", createdProduct);
                     reply = new Reply<>("SUCCESS", "Product created successfully", createdProduct);
+                    break;
 //                case "UPDATE":
 //                    LOGGER.info("Received UPDATE command");
 //                    // Handle update command
