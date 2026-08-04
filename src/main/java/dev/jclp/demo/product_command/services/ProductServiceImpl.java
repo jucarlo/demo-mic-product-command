@@ -7,6 +7,8 @@ import dev.jclp.demo.product_command.repositories.ProductRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 public class ProductServiceImpl implements ProductService {
 
@@ -30,5 +32,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id)
                 .map(Mappers::toProductDto)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDto> findAll() {
+        return productRepository.findAll().stream()
+                .map(Mappers::toProductDto)
+                .toList();
     }
 }

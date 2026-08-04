@@ -35,7 +35,7 @@ public class ProductCommandConsumer {
             Command<ProductDto> command = msg.getPayload();
             String type = command.type() == null ? "" : command.type().toUpperCase();
 
-            Reply<ProductDto> reply;
+            Reply<?> reply;
 
             switch (type) {
                 case "CREATE":
@@ -66,6 +66,13 @@ public class ProductCommandConsumer {
                         }
                     }
                     break;
+                    case "READ_ALL":
+                    LOGGER.info("Received READ_ALL command");
+                    java.util.List<ProductDto> products = productService.findAll();
+                    LOGGER.info("Products read successfully: {}", products);
+                    reply = new Reply<>("SUCCESS", "Products read successfully", products);
+                    break;
+
 //                case "UPDATE":
 //                    LOGGER.info("Received UPDATE command");
 //                    // Handle update command
