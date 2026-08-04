@@ -12,4 +12,8 @@ public interface ProductService {
     ProductDto findById(Long id);
 
     List<ProductDto> findAll();
+
+    ProductDto update(Long id, ProductDto productDto);
+
+    boolean delete(Long id);
 }

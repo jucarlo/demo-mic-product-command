@@ -73,16 +73,34 @@ public class ProductCommandConsumer {
                     reply = new Reply<>("SUCCESS", "Products read successfully", products);
                     break;
 
-//                case "UPDATE":
-//                    LOGGER.info("Received UPDATE command");
-//                    // Handle update command
-//                    return new Reply<>("ERROR", "UPDATE operation not implemented", null);
-//                    break;
-//                case "DELETE":
-//                    LOGGER.info("Received DELETE command");
-//                    LOGGER.info("Received DELETE command for product: {}", command.body());
-//                    return new Reply<>("ERROR", "DELETE operation not implemented", null);
-//                    break;
+                case "UPDATE":
+                    LOGGER.info("Received UPDATE command");
+                    if (command.id() == null || command.body() == null) {
+                        LOGGER.warn("Received UPDATE command with null id or body");
+                        reply = new Reply<>("ERROR", "Command id and body cannot be null for UPDATE operation", null);
+                    } else {
+                        LOGGER.info("Received UPDATE command for product id: {} with data: {}", command.id(), command.body());
+                        ProductDto updatedProduct = productService.update(command.id(), command.body());
+                        LOGGER.info("Product updated successfully: {}", updatedProduct);
+                        reply = new Reply<>("SUCCESS", "Product updated successfully", updatedProduct);
+                    }
+                    break;
+                case "DELETE":
+                    LOGGER.info("Received DELETE command");
+                    if (command.id() == null) {
+                        LOGGER.warn("Received DELETE command with null id");
+                        reply = new Reply<>("ERROR", "Command id cannot be null for DELETE operation", null);
+                    } else {
+                        boolean deleted = productService.delete(command.id());
+                        if (deleted) {
+                            LOGGER.info("Product deleted successfully: {}", command.id());
+                            reply = new Reply<>("SUCCESS", "Product deleted successfully", null);
+                        } else {
+                            LOGGER.warn("Product not found for id: {}", command.id());
+                            reply = new Reply<>("ERROR", "Product not found for id: " + command.id(), null);
+                        }
+                    }
+                    break;
                 default:
                     LOGGER.error("Unhandled command type: {}", type);
                     reply = new Reply<>("ERROR", "Unhandled command type: " + type, null);

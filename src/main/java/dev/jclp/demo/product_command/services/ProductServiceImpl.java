@@ -41,4 +41,27 @@ public class ProductServiceImpl implements ProductService {
                 .map(Mappers::toProductDto)
                 .toList();
     }
+
+    @Override
+    @Transactional
+    public ProductDto update(Long id, ProductDto productDto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+        // Update the product fields with the values from productDto
+        product.setName(productDto.name());
+        product.setPrice(productDto.price());
+        productRepository.save(product);
+        return Mappers.toProductDto(product);
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(Long id) {
+        boolean result = productRepository.existsById(id);
+        if (result) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }
