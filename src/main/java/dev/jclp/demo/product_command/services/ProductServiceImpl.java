@@ -2,6 +2,7 @@ package dev.jclp.demo.product_command.services;
 
 import dev.jclp.demo.product_command.entities.Product;
 import dev.jclp.demo.product_command.model.dto.ProductDto;
+import dev.jclp.demo.product_command.model.mapper.Mappers;
 import dev.jclp.demo.product_command.repositories.ProductRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +20,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDto create(ProductDto productDto) {
         // Implementation of the create method
-        Product product = new Product(productDto.name(), productDto.price());
-        Product productNew = productRepository.save(product);
-
-        return new ProductDto(productNew.getId(), productNew.getName(), productNew.getPrice());
+        Product productNew = productRepository.save(Mappers.toProductEntity(productDto));
+        return Mappers.toProductDto(productNew);
     }
 }
