@@ -94,7 +94,7 @@ public class ProductCommandConsumer {
                         boolean deleted = productService.delete(command.id());
                         if (deleted) {
                             LOGGER.info("Product deleted successfully: {}", command.id());
-                            reply = new Reply<>(ReplyStatus.SUCCESS, "Product deleted successfully", null);
+                            reply = new Reply<>(ReplyStatus.SUCCESS, "Product deleted successfully", "Product with id " + command.id() + " deleted");
                         } else {
                             LOGGER.warn("Product not found for id: {}", command.id());
                             reply = new Reply<>(ReplyStatus.ERROR, "Product not found for id: " + command.id(), null);
